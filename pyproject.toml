@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "fingersavior"
+version = "0.1.0"
+description = ""
+authors = ["Taokyla <admin@taokyla.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+aircv = "^1.4.6"
+opencv-python = "^4.8.0.76"
+pywin32 = "^306"
+loguru = "^0.7.2"
+pathos = "^0.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "ustc"
+url = "https://pypi.mirrors.ustc.edu.cn/simple/"
+priority = "default"
