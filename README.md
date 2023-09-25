@@ -6,9 +6,11 @@
 
 ```
 FingerSavior
-├─lib
-|  └─*.py...
-├─main.py
+├─src
+|  ├─fingersavior
+|  |    └─*.py
+|  └─main.py
+├─run.bat
 ├─模块文件夹
 |     ├─name1@command.arg1.arg2.png
 |     ├─name2.offsetx.offsety.png
