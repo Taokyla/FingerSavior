@@ -9,7 +9,7 @@ from .window import Window
 
 class Game(object):
     def __init__(self, hwnd):
-        self.window = Window(hwnd=hwnd)
+        self.window = Window(hwnd)
         self.last_flow: Flow | None = None
         self.next_flow_name: str | None = None
 
@@ -31,21 +31,25 @@ class Game(object):
                 logger.debug(f"flow {flow.name} found!")
                 top_left_corner, buttom_right_corner = result['rectangle'][0], result['rectangle'][3]
                 flowresult = flow.handle(self, top_left_corner, buttom_right_corner)
-                self.last_flow = flow
-                if flowresult == HandleResult.BREAK:
-                    logger.debug("跳出循环")
-                    break
-                elif flowresult == HandleResult.CONTINUE:
-                    logger.debug("跳过循环")
+                if flowresult == HandleResult.MISS:
+                    logger.debug("跳过循环，且不保存")
                     continue
-                elif flowresult == HandleResult.RETURN:
-                    logger.debug("结束本次flow循环")
-                    return
-                elif flowresult == HandleResult.EXIT:
-                    logger.debug("结束进程")
-                    exit(0)
                 else:
-                    pass
+                    self.last_flow = flow
+                    if flowresult == HandleResult.BREAK:
+                        logger.debug("跳出循环")
+                        break
+                    elif flowresult == HandleResult.CONTINUE:
+                        logger.debug("跳过循环")
+                        continue
+                    elif flowresult == HandleResult.RETURN:
+                        logger.debug("结束本次flow循环")
+                        return
+                    elif flowresult == HandleResult.EXIT:
+                        logger.debug("结束进程")
+                        exit(0)
+                    else:
+                        pass
         else:
             self.next_flow_name = None
             logger.debug("本轮没有找到任何流程")
