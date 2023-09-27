@@ -84,5 +84,5 @@ class Window(object):
     def take_screen_shot(self, savedir: Path = Path("save"), compression: int = 0):
         if self.frame is None:
             self.frame_shot()
-        save_path = savedir.joinpath(f"{get_now()}_{uuid.uuid4().hex[:8]}")
+        save_path = savedir.joinpath(f"{get_now()}_{uuid.uuid4().hex[:8]}.png")
         cv2.imwrite(save_path.as_posix(), self.frame, [int(cv2.IMWRITE_PNG_COMPRESSION), compression])
