@@ -58,7 +58,7 @@ class CommandUseLastClick(Command):
 
 
 class CommandCount(Command):
-    counting = {}
+    counting: dict[int, dict[str, int]] = {}
 
     def __init__(self, command: str, count: int | str):
         super().__init__(command)
@@ -66,10 +66,15 @@ class CommandCount(Command):
 
     def handle(self, flow: "Flow", game: "Game", top_left, bottom_right):
         result = super().handle(flow, game, top_left, bottom_right)
-        last_count = CommandCount.counting.get(flow.name, 0)
+        game_counts = CommandCount.counting.get(game.window.hwnd)
+        if game_counts:
+            last_count = game_counts.get(flow.name, 0)
+        else:
+            CommandCount.counting[game.window.hwnd] = {flow.name: 0}
+            last_count = 0
         count = last_count + 1
-        logger.info(f"{flow.name} count {count}/{self.count}")
-        CommandCount.counting[flow.name] = count
+        logger.info(f"{game.window.hwnd}:{flow.name} count {count}/{self.count}")
+        CommandCount.counting[game.window.hwnd][flow.name] = count
         if count >= int(self.count):
             return HandleResult.EXIT
         return result
