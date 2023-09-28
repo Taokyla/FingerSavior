@@ -48,20 +48,34 @@ class Flow(object):
 
 
 @cache
+def split_with(line, symbol):
+    if symbol in line:
+        return line[:line.find(symbol)], line[line.find(symbol) + 1:]
+    return line, None
+
+
+@cache
 def parse_flow(file_path: str | Path) -> Flow:
     if not isinstance(file_path, Path):
         file_path = Path(file_path)
     file_name, _ = os.path.splitext(file_path.name)
+    file_name, property_line = split_with(file_name, PROPERTY_SYMBOL)
+    command_line = None
+    if COMMAND_SYMBOL in file_name:
+        file_name, command_line = split_with(file_name, COMMAND_SYMBOL)
+    if property_line and COMMAND_SYMBOL in property_line:
+        property_line, command_line = split_with(property_line, COMMAND_SYMBOL)
     extra_property = None
-    if PROPERTY_SYMBOL in file_name:
+    if property_line is not None:
         extra_property = {}
-        file_name, property_line = file_name[:file_name.find(PROPERTY_SYMBOL)], file_name[file_name.find(PROPERTY_SYMBOL) + 1:]
+        if COMMAND_SYMBOL in property_line:
+            file_name += property_line[property_line.find(COMMAND_SYMBOL):]
         for line in property_line.split(","):
             name, value = line.split("=")
             extra_property[name] = value
-    if COMMAND_SYMBOL in file_name:
-        file_name, command_line = file_name[:file_name.find(COMMAND_SYMBOL)], file_name[file_name.find(COMMAND_SYMBOL) + 1:]
-        return Flow(file_name, file_path, build_command(command_line.split(ARG_SYMBOL)[0], *command_line.split(ARG_SYMBOL)[1:]), extra_property=extra_property)
+    if command_line is not None:
+        args = command_line.split(ARG_SYMBOL)
+        return Flow(file_name, file_path, build_command(args[0], *args[1:]), extra_property=extra_property)
     else:
         image_type = file_name.count(ARG_SYMBOL)
         if image_type >= 2:
