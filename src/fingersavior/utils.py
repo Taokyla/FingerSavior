@@ -9,16 +9,11 @@ import numpy
 def random_int(min_num: int, max_num: int):
     if max_num < min_num:
         min_num, max_num = max_num, min_num
-
-    def get_rand():
-        randn = numpy.random.randn()
-        if abs(randn) > 2:
-            return get_rand()
-        else:
-            return randn
-
-    rand = get_rand()
-    return int((max_num - min_num) / 2.0 * (rand / 2.5) + (min_num + max_num) / 2.0)
+    rand = numpy.random.randn()
+    num = int((max_num - min_num) / 2.0 * (rand / 2.5) + (min_num + max_num) / 2.0)
+    if num < min_num or num > max_num:
+        return random_int(min_num, max_num)
+    return num
 
 
 def get_now(time_format: str = "%Y-%m-%d %H%M%S"):
