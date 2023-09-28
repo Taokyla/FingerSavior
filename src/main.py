@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 
 from loguru import logger
-from pathos.multiprocessing import ProcessingPool
+from pathos.multiprocessing import ProcessPool
 
 from fingersavior.game import Game
 from fingersavior.window import Window
@@ -42,7 +42,7 @@ if __name__ == '__main__':
         total = len(wins)
         if total > 1:
             try:
-                pool = ProcessingPool(nodes=total)
+                pool = ProcessPool(nodes=total)
                 names = [name] * len(wins)
                 pool.imap(run, wins, names)
             except Exception as e:
