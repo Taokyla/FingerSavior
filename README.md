@@ -12,7 +12,8 @@ FingerSavior
 |  └─main.py
 ├─run.bat
 ├─模块文件夹
-|     ├─name1@command.arg1.arg2.png
+|     ├─name1@command.arg1.arg2#property=value.png
+|     ├─name1#property=value@command.arg1.arg2.png #可同名
 |     ├─name2.offsetx.offsety.png
 |     └─name3.topleftx.toplefty.bottomrightx.bottomrighty.png
 ```
@@ -29,6 +30,11 @@ FingerSavior
 - **jump** : 跳转到, 参数name, 跳转到本次flow循环后续flow的的某个, 不会结束循环, 只能跳转到排序在其后的flow
 - **count** : 累计, 参数count,累计点击到`count`次时关闭脚本
 - **uselastclick** : 使用上一个flow的点击位置, 模拟玩家鼠标没有移动一直点
+
+### property属性
+
+- **chance** : 使用概率百分比, 默认为100, 随机失败时当作没找到这张图 
+
 
 
 ### future
